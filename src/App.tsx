@@ -10,13 +10,23 @@ import { GitHubModal } from './components/GitHubModal';
 import { Garment, DaySchedule, Outfit, GarmentStatus } from './types';
 import { INITIAL_GARMENTS, INITIAL_WEEK_SCHEDULE } from './data/initialData';
 
-const GARMENTS_STORAGE_KEY = 'armario_outfits_garments_v1';
-const SCHEDULE_STORAGE_KEY = 'armario_outfits_schedule_v1';
+const GARMENTS_STORAGE_KEY = 'armario_outfits_garments_v2';
+const SCHEDULE_STORAGE_KEY = 'armario_outfits_schedule_v2';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'armario' | 'combinador' | 'calendario' | 'lavanderia'>('armario');
 
-  // Load garments from localStorage or fallback to initial realistic garments
+  // Clear legacy mock data v1 if previously cached
+  useEffect(() => {
+    try {
+      localStorage.removeItem('armario_outfits_garments_v1');
+      localStorage.removeItem('armario_outfits_schedule_v1');
+    } catch (e) {
+      console.warn('Storage cleanup notice', e);
+    }
+  }, []);
+
+  // Load garments from localStorage or start empty
   const [garments, setGarments] = useState<Garment[]>(() => {
     try {
       const saved = localStorage.getItem(GARMENTS_STORAGE_KEY);
@@ -24,7 +34,7 @@ export default function App() {
     } catch (e) {
       console.error('Error reading garments from localStorage', e);
     }
-    return INITIAL_GARMENTS;
+    return INITIAL_GARMENTS; // Starts empty []
   });
 
   // Load week schedule from localStorage or fallback

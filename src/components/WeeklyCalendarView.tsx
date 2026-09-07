@@ -22,10 +22,18 @@ export const WeeklyCalendarView: React.FC<WeeklyCalendarViewProps> = ({
   const { isIPhoneFrame } = useIPhoneMode();
   const [isAutoGenerating, setIsAutoGenerating] = useState(false);
   const [activeDayModal, setActiveDayModal] = useState<DaySchedule | null>(null);
+  const [calendarNotice, setCalendarNotice] = useState<string>('');
 
   const findGarment = (id?: string) => garments.find((g) => g.id === id);
 
   const handleAutoGenerateWeek = async () => {
+    if (garments.length === 0) {
+      setCalendarNotice('Tu armario está vacío. Añade algunas prendas en la pestaña "Armario" antes de autogenerar la semana.');
+      setTimeout(() => setCalendarNotice(''), 5000);
+      return;
+    }
+
+    setCalendarNotice('');
     setIsAutoGenerating(true);
     try {
       const availableGarments = garments.filter((g) => g.status !== 'laundry');
@@ -164,6 +172,13 @@ export const WeeklyCalendarView: React.FC<WeeklyCalendarViewProps> = ({
             )}
           </button>
         </div>
+
+        {calendarNotice && (
+          <div className="bg-amber-50 border border-amber-300/80 p-3 rounded-2xl text-xs text-amber-900 flex items-center gap-2 shadow-2xs">
+            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+            <span className="font-medium">{calendarNotice}</span>
+          </div>
+        )}
       </div>
 
       {/* Visual Weekly Grid */}

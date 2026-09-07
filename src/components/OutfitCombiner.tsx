@@ -29,6 +29,7 @@ export const OutfitCombiner: React.FC<OutfitCombinerProps> = ({
   const [selectedDayToAssign, setSelectedDayToAssign] = useState<string>('lunes');
   const [assignedMessage, setAssignedMessage] = useState<string>('');
   const [wornMessage, setWornMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   // Available garments (exclude laundry items)
   const availableGarments = garments.filter((g) => g.status !== 'laundry');
@@ -36,11 +37,17 @@ export const OutfitCombiner: React.FC<OutfitCombinerProps> = ({
 
   const handleGenerateOutfit = async () => {
     if (availableGarments.length === 0) {
-      alert('No tienes prendas limpias o disponibles en el armario. Revisa tu cesto de lavado.');
+      setErrorMessage(
+        garments.length === 0
+          ? 'Tu armario está vacío. Ve a la pestaña "Armario" y añade algunas prendas para que el estilista pueda combinarlas.'
+          : 'No tienes prendas limpias disponibles. Revisa tu cesto de lavandería para lavarlas.'
+      );
+      setTimeout(() => setErrorMessage(''), 6000);
       return;
     }
 
     setIsLoading(true);
+    setErrorMessage('');
     setAssignedMessage('');
     setWornMessage('');
 
@@ -153,6 +160,13 @@ export const OutfitCombiner: React.FC<OutfitCombinerProps> = ({
               <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
               <span><strong>{laundryCount}</strong> prenda(s) en lavado excluidas automáticamente.</span>
             </div>
+          </div>
+        )}
+
+        {errorMessage && (
+          <div className="bg-amber-50 border border-amber-300/80 p-3 rounded-2xl text-xs text-amber-900 flex items-center gap-2 shadow-2xs">
+            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+            <span className="font-medium">{errorMessage}</span>
           </div>
         )}
       </div>

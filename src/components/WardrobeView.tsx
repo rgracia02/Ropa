@@ -149,19 +149,41 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
         })}
       </div>
 
-      {/* Grid of Garment Cards */}
-      {filteredGarments.length === 0 ? (
-        <div className="text-center py-12 liquid-glass-card rounded-[2rem] border border-white/80 p-6">
-          <Shirt className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-          <h3 className="text-sm font-bold text-slate-900">No se encontraron prendas</h3>
-          <p className="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
-            Prueba ajustando los filtros o añade una nueva prenda a tu armario.
+      {/* Grid of Garment Cards or Empty State */}
+      {garments.length === 0 ? (
+        <div className="text-center py-12 liquid-glass-card rounded-[2.2rem] border border-white/80 p-6 sm:p-8 flex flex-col items-center shadow-xs">
+          <div className="w-14 h-14 rounded-2xl bg-slate-900 text-white flex items-center justify-center mb-3 shadow-md">
+            <Shirt className="w-7 h-7 text-sky-400" />
+          </div>
+          <h3 className="text-base font-bold text-slate-900">Tu armario está listo y vacío</h3>
+          <p className="text-xs text-slate-600 mt-1.5 max-w-sm leading-relaxed">
+            Comienza añadiendo tus prendas reales (poleras, camisas, pantalones, chaquetas o calzados) con sus colores, ocasión y estilo.
           </p>
           <button
+            id="btn-anadir-primera-prenda"
             onClick={onAddGarment}
+            className="mt-4 px-5 py-2.5 bg-slate-900 text-white text-xs font-bold rounded-full hover:bg-slate-800 transition cursor-pointer shadow-md flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Plus className="w-4 h-4 text-sky-400" />
+            <span>Añadir mi primera prenda</span>
+          </button>
+        </div>
+      ) : filteredGarments.length === 0 ? (
+        <div className="text-center py-10 liquid-glass-card rounded-[2rem] border border-white/80 p-6">
+          <Shirt className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+          <h3 className="text-sm font-bold text-slate-900">No hay prendas con estos filtros</h3>
+          <p className="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
+            Prueba ajustando los filtros de categoría o búsqueda.
+          </p>
+          <button
+            onClick={() => {
+              setSearchQuery('');
+              setSelectedCategory('all');
+              setSelectedStatus('all');
+            }}
             className="mt-3.5 px-4 py-2 bg-slate-900 text-white text-xs font-medium rounded-full hover:bg-slate-800 transition cursor-pointer"
           >
-            Añadir prenda ahora
+            Restablecer filtros
           </button>
         </div>
       ) : (
