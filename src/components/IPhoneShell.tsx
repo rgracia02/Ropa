@@ -51,13 +51,13 @@ export const IPhoneShell: React.FC<IPhoneShellProps> = ({
         <div className="ambient-blob-3" />
       </div>
 
-      {/* Top Desktop Controls Bar */}
-      <header className="w-full max-w-6xl mx-auto px-4 py-3 z-30 flex items-center justify-between gap-3 text-xs">
+      {/* Top Desktop Controls Bar (shown on desktop, hidden on real phones) */}
+      <header className="hidden sm:flex w-full max-w-6xl mx-auto px-4 py-3 z-30 items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
             <Smartphone className="w-4 h-4 text-sky-400" />
           </div>
-          <div className="hidden sm:block">
+          <div>
             <span className="font-bold text-slate-900">Armario iOS</span>
             <span className="ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/80 border border-white/60 text-slate-600 shadow-2xs">
               Liquid Glass UI
@@ -98,29 +98,28 @@ export const IPhoneShell: React.FC<IPhoneShellProps> = ({
             className="px-3.5 py-1.5 rounded-full bg-white/90 hover:bg-white text-slate-900 border border-slate-300/80 font-bold text-xs shadow-xs transition flex items-center gap-1.5 cursor-pointer hover:shadow-sm"
           >
             <Github className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Subir a</span>
             <span>GitHub</span>
           </button>
         </div>
       </header>
 
-      {/* Main Container: Either realistic iPhone 16 Pro chassis OR responsive full view */}
-      <main className="w-full flex-1 flex justify-center items-start p-1 sm:p-4 z-10 pb-16 overflow-x-hidden">
+      {/* Main Container: Native full bleed on real phones, simulated iPhone 16 Pro chassis on desktop */}
+      <main className="w-full flex-1 flex justify-center items-start p-0 sm:p-4 z-10 pb-0 sm:pb-16 overflow-x-hidden min-h-screen">
         {isIPhoneFrame ? (
           /* iPhone 16 Pro Chassis Mockup */
-          <div className="relative w-full max-w-[390px] sm:max-w-[410px] mx-auto my-1">
-            {/* Outer Titanium Frame Edge */}
-            <div className="p-2 sm:p-2.5 rounded-[46px] sm:rounded-[52px] bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 shadow-[0_20px_50px_-15px_rgba(15,23,42,0.4),0_0_0_1px_rgba(255,255,255,0.18)] border-2 border-slate-600/50 relative">
-              {/* Hardware Button Accents - Flush to border, no outer spill */}
+          <div className="relative w-full sm:max-w-[410px] mx-auto sm:my-1 min-h-[100dvh] sm:min-h-0 flex-1 sm:flex-initial flex flex-col">
+            {/* Outer Titanium Frame Edge (only on desktop) */}
+            <div className="sm:p-2.5 sm:rounded-[52px] sm:bg-gradient-to-b sm:from-slate-700 sm:via-slate-800 sm:to-slate-900 sm:shadow-[0_20px_50px_-15px_rgba(15,23,42,0.4),0_0_0_1px_rgba(255,255,255,0.18)] sm:border-2 sm:border-slate-600/50 p-0 rounded-none bg-transparent shadow-none border-none relative flex-1 flex flex-col">
+              {/* Hardware Button Accents - Flush to border, on desktop only */}
               <div className="hidden sm:block absolute -left-1 top-24 w-1 h-10 bg-slate-500/80 rounded-l-xs shadow-2xs" title="Action Button" />
               <div className="hidden sm:block absolute -left-1 top-38 w-1 h-14 bg-slate-500/80 rounded-l-xs shadow-2xs" title="Volume Up" />
               <div className="hidden sm:block absolute -left-1 top-56 w-1 h-14 bg-slate-500/80 rounded-l-xs shadow-2xs" title="Volume Down" />
               <div className="hidden sm:block absolute -right-1 top-36 w-1 h-18 bg-slate-500/80 rounded-r-xs shadow-2xs" title="Power Button" />
 
-              {/* Inner Screen Bezel */}
-              <div className="relative w-full bg-slate-100/95 rounded-[38px] sm:rounded-[44px] overflow-hidden border border-slate-900/40 flex flex-col h-[740px] sm:h-[800px] max-h-[85vh] shadow-inner">
-                {/* iOS Top Status Bar */}
-                <div className="w-full pt-2.5 px-5 pb-0.5 flex items-center justify-between text-xs font-bold text-slate-900 shrink-0 select-none z-20">
+              {/* Inner Screen Bezel (full height on mobile, framed on desktop) */}
+              <div className="relative w-full bg-slate-100/95 sm:rounded-[44px] overflow-hidden sm:border sm:border-slate-900/40 flex flex-col min-h-[100dvh] sm:min-h-0 sm:h-[800px] sm:max-h-[85vh] sm:shadow-inner flex-1">
+                {/* iOS Top Status Bar (only needed on desktop simulator) */}
+                <div className="hidden sm:flex w-full pt-2.5 px-5 pb-0.5 items-center justify-between text-xs font-bold text-slate-900 shrink-0 select-none z-20">
                   <span className="tracking-tight text-[12px] sm:text-[13px]">{currentTime}</span>
 
                   <div className="flex items-center gap-1.5 text-slate-800 text-[11px]">
@@ -136,7 +135,7 @@ export const IPhoneShell: React.FC<IPhoneShellProps> = ({
                 </div>
 
                 {/* iPhone Dynamic Island */}
-                <div className="shrink-0 -mt-0.5">
+                <div className="shrink-0 pt-2 sm:pt-0 sm:-mt-0.5">
                   <DynamicIsland
                     garments={garments}
                     onNavigateToLaundry={onNavigateToLaundry}
@@ -149,8 +148,8 @@ export const IPhoneShell: React.FC<IPhoneShellProps> = ({
                   {children}
                 </div>
 
-                {/* iOS Bottom Dock - Locked inside iPhone screen */}
-                <div className="absolute bottom-3 inset-x-0 flex justify-center z-40 px-2.5 pointer-events-auto">
+                {/* iOS Bottom Dock - Fixed/Locked inside screen */}
+                <div className="fixed sm:absolute bottom-3 inset-x-0 flex justify-center z-40 px-2.5 pointer-events-auto">
                   <IOSBottomDock
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
@@ -159,8 +158,8 @@ export const IPhoneShell: React.FC<IPhoneShellProps> = ({
                   />
                 </div>
 
-                {/* iOS Bottom Home Indicator Bar */}
-                <div className="absolute bottom-1 inset-x-0 flex justify-center pointer-events-none z-50">
+                {/* iOS Bottom Home Indicator Bar (desktop only, phone already has hardware bar) */}
+                <div className="hidden sm:flex absolute bottom-1 inset-x-0 justify-center pointer-events-none z-50">
                   <div className="w-28 h-1 bg-slate-900/40 rounded-full backdrop-blur-xs" />
                 </div>
               </div>
