@@ -1,0 +1,6 @@
+{
+  "name": "Gestor de Ropa y Outfits Semanales",
+  "description": "Organizador de guardarropa para iPhone con diseño Liquid Glass, combinador con IA según clima y ocasión, calendario semanal y control de lavado.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
